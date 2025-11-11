@@ -3,335 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP Code School (SPA Demo)</title>
+    <title>Amrit Vidyalayam - Excellence in Education</title>
+    
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        /* Custom Styles for Page Transitions */
-        .page {
+        /* --- CSS Variables for Theming --- */
+        :root {
+            --bs-body-bg: #fff;
+            --bs-body-color: #212529;
+            --navbar-bg: #0d6efd;
+            --card-bg: #fff;
+            --footer-bg: #212529;
+        }
+
+        [data-theme="dark"] {
+            --bs-body-bg: #121212;
+            --bs-body-color: #e0e0e0;
+            --navbar-bg: #1a1a1a;
+            --card-bg: #1e1e1e;
+            --footer-bg: #0c0c0c;
+        }
+
+        /* --- Global Styles --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- Page Transitions --- */
+        .page-section {
+            display: block;
             opacity: 1;
             transition: opacity 0.4s ease-in-out;
         }
-
-        .page.hidden {
+        .page-section.hidden {
             display: none;
         }
 
-        /* Ensure cards in a row have the same height */
+        /* --- Component Overrides --- */
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+            transition: background-color 0.3s ease;
+        }
         .card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            background-color: var(--card-bg);
+            color: var(--bs-body-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border: 1px solid rgba(0,0,0,.125);
         }
-        .card-body {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+        [data-theme="dark"] .card {
+            border-color: rgba(255,255,255,.125);
         }
-        .card-text {
-            flex-grow: 1;
+        footer {
+            background-color: var(--footer-bg);
+            color: #fff;
+            transition: background-color 0.3s ease;
         }
-        .mt-auto {
-            margin-top: auto;
+        .form-control, .form-select {
+            background-color: var(--card-bg);
+            color: var(--bs-body-color);
+        }
+        [data-theme="dark"] .form-control {
+            border-color: #495057;
         }
 
-        /* Custom Jumbotron style */
-        .jumbotron-custom {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+        /* --- Custom Jumbotron --- */
+        .hero-jumbotron {
+            background: linear-gradient(rgba(13, 110, 253, 0.7), rgba(13, 110, 253, 0.7)), url('https://images.unsplash.com/photo-1581078426770-6d336e5de7bf?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
             background-size: cover;
             color: white;
+            border-radius: 0;
+        }
+
+        /* --- Dark Mode Toggle --- */
+        .form-check-input:checked {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+        
+        /* --- Admin Login --- */
+        .admin-login-form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        /* --- Announcement Item --- */
+        .announcement-item {
+            border-left: 4px solid var(--bs-primary);
+            padding-left: 1rem;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <!-- --- NAVIGATION --- -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#" data-target="home-page"><i class="bi bi-code-slash"></i> PHP Code School</a>
+            <a class="navbar-brand fw-bold" href="#" data-target="home-page">
+                <i class="bi bi-mortarboard-fill"></i> Amrit Vidyalayam
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-target="home-page">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-target="courses-page">All Courses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-target="contact-page">Contact</a>
+                    <li class="nav-item"><a class="nav-link active" href="#" data-target="home-page">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-target="about-page">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-target="academics-page">Academics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-target="announcements-page">Announcements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-target="contact-page">Contact</a></li>
+                    <li class="nav-item ms-3 d-flex align-items-center">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch">
+                            <label class="form-check-label text-white" for="darkModeSwitch"><i class="bi bi-moon-fill"></i></label>
+                        </div>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Container -->
-    <main class="container-fluid">
-
+    <!-- --- MAIN CONTENT --- -->
+    <main>
         <!-- HOME PAGE -->
-        <section id="home-page" class="page">
-            <div class="p-5 mb-4 rounded-3 jumbotron-custom">
-                <div class="container-fluid py-5">
-                    <h1 class="display-5 fw-bold">Learn to Code with PHP</h1>
-                    <p class="col-md-8 fs-4">Master the skills to build dynamic websites and powerful web applications. From beginner to advanced, we have the right course for you.</p>
-                    <a class="btn btn-primary btn-lg" href="#" data-target="courses-page" role="button">Browse All Courses</a>
+        <section id="home-page" class="page-section">
+            <div class="hero-jumbotron p-5 p-lg-0 text-center">
+                <div class="container py-5">
+                    <h1 class="display-4 fw-bold">Welcome to Amrit Vidyalayam</h1>
+                    <p class="lead">Nurturing young minds for a brighter future since 1985.</p>
+                    <a class="btn btn-light btn-lg" href="#" data-target="about-page" role="button">Learn More About Us</a>
                 </div>
             </div>
-
-            <div class="container">
-                <h2 class="mb-4 text-center">Featured Courses</h2>
-                <div id="featured-courses-container" class="row">
-                    <!-- Featured courses will be injected here by JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ALL COURSES PAGE -->
-        <section id="courses-page" class="page hidden">
-            <div class="container mt-4">
-                <h1 class="mb-4">All Our Courses</h1>
-                <div id="all-courses-container" class="row">
-                    <!-- All courses will be injected here by JS -->
+            <div class="container my-5">
+                <h2 class="text-center mb-4">Latest Announcements</h2>
+                <div id="home-announcements-list">
+                    <!-- Announcements will be injected here -->
                 </div>
             </div>
         </section>
 
-        <!-- COURSE DETAIL PAGE -->
-        <section id="course-detail-page" class="page hidden">
-            <div class="container mt-4">
-                <button class="btn btn-secondary mb-3" id="back-to-courses-btn"><i class="bi bi-arrow-left"></i> Back to Courses</button>
-                <div id="course-detail-content">
-                    <!-- Course details will be injected here by JS -->
+        <!-- ABOUT PAGE -->
+        <section id="about-page" class="page-section hidden">
+            <div class="container my-5">
+                <h1 class="mb-4">About Amrit Vidyalayam</h1>
+                <p>Amrit Vidyalayam is a renowned institution committed to providing holistic education. We believe in fostering not just academic excellence but also moral and spiritual growth in our students. Our state-of-the-art facilities and dedicated faculty create an environment where every child can thrive.</p>
+                <div class="row mt-5">
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-trophy-fill text-primary" style="font-size: 3rem;"></i>
+                        <h4 class="mt-2">Excellence</h4>
+                        <p>A tradition of high academic and co-curricular achievements.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-people-fill text-success" style="font-size: 3rem;"></i>
+                        <h4 class="mt-2">Community</h4>
+                        <p>Fostering a sense of belonging and mutual respect.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-lightbulb-fill text-warning" style="font-size: 3rem;"></i>
+                        <h4 class="mt-2">Innovation</h4>
+                        <p>Encouraging creative thinking and problem-solving skills.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACADEMICS PAGE -->
+        <section id="academics-page" class="page-section hidden">
+            <div class="container my-5">
+                <h1 class="mb-4">Academics</h1>
+                <p>Our curriculum is designed to be challenging, comprehensive, and relevant to the modern world.</p>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Primary School (Grade 1-5)</h5>
+                                <p class="card-text">Focus on foundational skills in literacy, numeracy, and science through activity-based learning.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Middle School (Grade 6-8)</h5>
+                                <p class="card-text">A more structured curriculum that introduces students to specialized subjects and critical thinking.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Senior School (Grade 9-12)</h5>
+                                <p class="card-text">In-depth study with a focus on preparing students for board exams and higher education.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANNOUNCEMENTS PAGE -->
+        <section id="announcements-page" class="page-section hidden">
+            <div class="container my-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Announcements</h1>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#announcementModal">
+                        <i class="bi bi-plus-circle"></i> Add New
+                    </button>
+                </div>
+                <div id="announcements-list">
+                    <!-- Announcements will be injected here -->
                 </div>
             </div>
         </section>
 
         <!-- CONTACT PAGE -->
-        <section id="contact-page" class="page hidden">
-            <div class="container mt-4">
-                <h1>Contact Us</h1>
-                <p>Have a question? Fill out the form below and we'll get back to you.</p>
-                <div id="contact-form-feedback"></div>
-                <form id="contact-form" class="mt-4">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Your Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+        <section id="contact-page" class="page-section hidden">
+            <div class="container my-5">
+                <h1 class="mb-4">Contact Us</h1>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Address:</strong><br> 123 Education Lane, Knowledge City, 110001</p>
+                        <p><strong>Phone:</strong><br> +91 98765 43210</p>
+                        <p><strong>Email:</strong><br> info@amritvidyalayam.edu</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="col-md-6">
+                        <form id="contact-form">
+                            <div class="mb-3">
+                                <label for="contact-name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="contact-name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact-email" class="form-label">Your Email</label>
+                                <input type="email" class="form-control" id="contact-email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact-message" class="form-label">Message</label>
+                                <textarea class="form-control" id="contact-message" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                        <div id="contact-feedback" class="mt-3"></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
+                </div>
             </div>
         </section>
-
+        
+        <!-- ADMIN PAGE (Hidden by default) -->
+        <section id="admin-page" class="page-section hidden">
+            <div class="container my-5">
+                <h1 class="mb-4">Admin Dashboard</h1>
+                <button id="logout-btn" class="btn btn-secondary mb-3">Logout</button>
+                <h3>Contact Form Submissions</h3>
+                <div id="submissions-list">
+                    <!-- Submissions will be injected here -->
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center p-3 mt-5">
-        <p>&copy; <span id="current-year"></span> PHP Code School. All Rights Reserved.</p>
+    <!-- --- FOOTER --- -->
+    <footer class="text-center p-3">
+        <p>&copy; <span id="current-year"></span> Amrit Vidyalayam. All Rights Reserved.</p>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
+    <!-- --- MODALS --- -->
+    <!-- Announcement Modal -->
+    <div class="modal fade" id="announcementModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Announcement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="announcement-form">
+                        <div class="mb-3">
+                            <label for="announcement-title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="announcement-title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="announcement-content" class="form-label">Content</label>
+                            <textarea class="form-control" id="announcement-content" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-announcement-btn">Save Announcement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="modal fade" id="adminLoginModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Admin Login</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="admin-login-form" class="admin-login-form">
+                        <div class="mb-3">
+                            <label for="admin-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="admin-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <div class="mt-2 text-muted small">Hint: password is "admin"</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- --- SCRIPTS --- -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom Application JavaScript -->
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. DATA STORE (Our "Database") ---
-            const coursesData = [
-                {
-                    id: 1,
-                    title: 'PHP Fundamentals',
-                    shortDescription: 'Learn the basics of PHP, from variables to loops and functions. Perfect for absolute beginners.',
-                    fullDescription: 'This comprehensive course will take you from knowing nothing about PHP to being a confident beginner. We cover syntax, data types, control structures, functions, and how to interact with HTML forms. You will build small, practical projects along the way to solidify your knowledge.',
-                    instructor: 'John Doe',
-                    duration: '8 hours',
-                    icon: 'bi-book-half'
-                },
-                {
-                    id: 2,
-                    title: 'Advanced PHP & OOP',
-                    shortDescription: 'Dive deep into Object-Oriented Programming, design patterns, and modern PHP practices.',
-                    fullDescription: 'Take your PHP skills to the next level. Master classes, objects, inheritance, polymorphism, and key design patterns like Singleton and Factory. This course is essential for building robust, scalable, and maintainable applications.',
-                    instructor: 'Jane Smith',
-                    duration: '12 hours',
-                    icon: 'bi-gear-fill'
-                },
-                {
-                    id: 3,
-                    title: 'Building a CMS with PHP',
-                    shortDescription: 'Learn how to build a custom Content Management System from scratch using PHP and MySQL.',
-                    fullDescription: 'In this project-based course, you will build a fully functional blog/CMS. We will cover user authentication, CRUD operations (Create, Read, Update, Delete), and building a simple admin panel. By the end, you will have a portfolio-worthy project.',
-                    instructor: 'John Doe',
-                    duration: '20 hours',
-                    icon: 'bi-hammer'
-                },
-                {
-                    id: 4,
-                    title: 'PHP & MySQL Integration',
-                    shortDescription: 'Master the art of connecting PHP to a MySQL database to create dynamic, data-driven websites.',
-                    fullDescription: 'Learn how to perform database operations securely using PDO (PHP Data Objects). This course covers writing complex SQL queries, preventing SQL injection, handling user data, and displaying database records on your web pages.',
-                    instructor: 'Emily Jones',
-                    duration: '10 hours',
-                    icon: 'bi-database-fill'
-                },
-                {
-                    id: 5,
-                    title: 'API Development with PHP',
-                    shortDescription: 'Learn to build robust RESTful APIs that can power mobile apps and modern front-end frameworks.',
-                    fullDescription: 'Enter the world of back-end development. This course teaches you how to design, build, and secure REST APIs using PHP. You will learn about HTTP methods, status codes, API authentication with tokens, and how to format data as JSON.',
-                    instructor: 'Chris Lee',
-                    duration: '15 hours',
-                    icon: 'bi-plug-fill'
-                }
-            ];
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. CONFIGURATION & INITIALIZATION ---
+            const STORAGE_KEYS = {
+                announcements: 'amrit_announcements',
+                submissions: 'amrit_submissions',
+                theme: 'amrit_theme'
+            };
+            const ADMIN_PASSWORD = 'admin'; // Simple password for demo
 
-            // --- 2. DOM ELEMENT REFERENCES ---
-            const pages = document.querySelectorAll('.page');
+            const pages = document.querySelectorAll('.page-section');
             const navLinks = document.querySelectorAll('.navbar-nav a[data-target]');
-            const featuredCoursesContainer = document.getElementById('featured-courses-container');
-            const allCoursesContainer = document.getElementById('all-courses-container');
-            const courseDetailContent = document.getElementById('course-detail-content');
-            const contactForm = document.getElementById('contact-form');
-            const contactFormFeedback = document.getElementById('contact-form-feedback');
-            const backToCoursesBtn = document.getElementById('back-to-courses-btn');
+            const darkModeSwitch = document.getElementById('darkModeSwitch');
             const currentYearSpan = document.getElementById('current-year');
 
+            // --- 2. CORE FUNCTIONS ---
 
-            // --- 3. CORE FUNCTIONS ---
-
-            /**
-             * Shows a specific page and hides all others.
-             * @param {string} pageId - The ID of the page to show.
-             */
+            /** Show a specific page and hide others */
             function showPage(pageId) {
                 pages.forEach(page => page.classList.add('hidden'));
                 document.getElementById(pageId).classList.remove('hidden');
-
-                // Update active nav link
                 navLinks.forEach(link => link.classList.remove('active'));
-                const activeLink = document.querySelector(`.navbar-nav a[data-target="${pageId}"]`);
-                if (activeLink) {
-                    activeLink.classList.add('active');
-                }
+                const activeLink = document.querySelector(`[data-target="${pageId}"]`);
+                if (activeLink) activeLink.classList.add('active');
+                window.scrollTo(0, 0);
             }
 
-            /**
-             * Renders course cards into a specified container.
-             * @param {HTMLElement} container - The container element.
-             * @param {Array} courses - The array of courses to render.
-             * @param {boolean} isFeatured - If true, shows a "Learn More" button.
-             */
-            function renderCourses(container, courses, isFeatured = false) {
-                container.innerHTML = ''; // Clear existing content
-                courses.forEach(course => {
-                    const courseCard = `
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi ${course.icon} me-2"></i>${course.title}</h5>
-                                    <p class="card-text flex-grow-1">${course.shortDescription}</p>
-                                    <p class="card-text"><small class="text-muted">Instructor: ${course.instructor} | Duration: ${course.duration}</small></p>
-                                    <a href="#" class="btn btn-primary mt-auto view-course-btn" data-course-id="${course.id}">${isFeatured ? 'Learn More' : 'View Course'}</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += courseCard;
-                });
+            /** Handle theme switching */
+            function setTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    darkModeSwitch.checked = true;
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    darkModeSwitch.checked = false;
+                }
+                localStorage.setItem(STORAGE_KEYS.theme, theme);
             }
             
-            /**
-             * Displays the full details of a single course.
-             * @param {number} courseId - The ID of the course to display.
-             */
-            function showCourseDetail(courseId) {
-                const course = coursesData.find(c => c.id === courseId);
-                if (!course) {
-                    courseDetailContent.innerHTML = '<div class="alert alert-danger">Course not found.</div>';
-                    showPage('course-detail-page');
+            /** Render announcements to the DOM */
+            function renderAnnouncements() {
+                const announcements = JSON.parse(localStorage.getItem(STORAGE_KEYS.announcements)) || [];
+                const announcementsList = document.getElementById('announcements-list');
+                const homeAnnouncementsList = document.getElementById('home-announcements-list');
+                
+                if (announcements.length === 0) {
+                    announcementsList.innerHTML = '<p>No announcements at this time.</p>';
+                    homeAnnouncementsList.innerHTML = '<p>No announcements at this time.</p>';
                     return;
                 }
 
-                courseDetailContent.innerHTML = `
-                    <h1><i class="bi ${course.icon} me-2"></i>${course.title}</h1>
-                    <hr>
-                    <p><strong>Instructor:</strong> ${course.instructor}</p>
-                    <p><strong>Duration:</strong> ${course.duration}</p>
-                    <div class="mt-4">
-                        <h3>About This Course</h3>
-                        <p>${course.fullDescription}</p>
+                const announcementHtml = announcements.map(ann => `
+                    <div class="card mb-3 announcement-item">
+                        <div class="card-body">
+                            <h5 class="card-title">${ann.title}</h5>
+                            <p class="card-text">${ann.content}</p>
+                            <small class="text-muted">${new Date(ann.timestamp).toLocaleString()}</small>
+                            <button class="btn btn-sm btn-danger float-end delete-announcement" data-id="${ann.id}">Delete</button>
+                        </div>
                     </div>
-                `;
-                showPage('course-detail-page');
+                `).join('');
+
+                announcementsList.innerHTML = announcementHtml;
+                homeAnnouncementsList.innerHTML = announcementHtml; // Show same on home
             }
 
-            // --- 4. EVENT LISTENERS ---
+            /** Save a new announcement */
+            function saveAnnouncement(title, content) {
+                const announcements = JSON.parse(localStorage.getItem(STORAGE_KEYS.announcements)) || [];
+                const newAnnouncement = {
+                    id: Date.now(),
+                    title,
+                    content,
+                    timestamp: new Date().toISOString()
+                };
+                announcements.unshift(newAnnouncement); // Add to the beginning
+                localStorage.setItem(STORAGE_KEYS.announcements, JSON.stringify(announcements));
+                renderAnnouncements();
+            }
 
-            // Navigation clicks
+            /** Delete an announcement */
+            function deleteAnnouncement(id) {
+                let announcements = JSON.parse(localStorage.getItem(STORAGE_KEYS.announcements)) || [];
+                announcements = announcements.filter(ann => ann.id !== parseInt(id));
+                localStorage.setItem(STORAGE_KEYS.announcements, JSON.stringify(announcements));
+                renderAnnouncements();
+            }
+            
+            /** Render contact submissions for admin */
+            function renderSubmissions() {
+                const submissions = JSON.parse(localStorage.getItem(STORAGE_KEYS.submissions)) || [];
+                const submissionsList = document.getElementById('submissions-list');
+                if (submissions.length === 0) {
+                    submissionsList.innerHTML = '<p>No submissions yet.</p>';
+                    return;
+                }
+                const submissionHtml = submissions.map(sub => `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">From: ${sub.name} (${sub.email})</h6>
+                            <p class="card-text">${sub.message}</p>
+                            <small class="text-muted">${new Date(sub.timestamp).toLocaleString()}</small>
+                        </div>
+                    </div>
+                `).join('');
+                submissionsList.innerHTML = submissionHtml;
+            }
+
+            // --- 3. EVENT LISTENERS ---
+            
+            // Navigation
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const targetPage = e.target.getAttribute('data-target');
-                    showPage(targetPage);
+                    const target = e.target.getAttribute('data-target');
+                    showPage(target);
                 });
             });
 
-            // Course card clicks (using event delegation)
-            document.addEventListener('click', (e) => {
-                if (e.target && e.target.classList.contains('view-course-btn')) {
-                    e.preventDefault();
-                    const courseId = parseInt(e.target.getAttribute('data-course-id'));
-                    showCourseDetail(courseId);
+            // Dark Mode Toggle
+            darkModeSwitch.addEventListener('change', () => {
+                const theme = darkModeSwitch.checked ? 'dark' : 'light';
+                setTheme(theme);
+            });
+
+            // Announcement Form (in modal)
+            document.getElementById('save-announcement-btn').addEventListener('click', () => {
+                const title = document.getElementById('announcement-title').value;
+                const content = document.getElementById('announcement-content').value;
+                if (title && content) {
+                    saveAnnouncement(title, content);
+                    bootstrap.Modal.getInstance(document.getElementById('announcementModal')).hide();
+                    document.getElementById('announcement-form').reset();
+                }
+            });
+            
+            // Delete Announcement (Event Delegation)
+            document.getElementById('announcements-list').addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-announcement')) {
+                    if (confirm('Are you sure you want to delete this announcement?')) {
+                        deleteAnnouncement(e.target.dataset.id);
+                    }
                 }
             });
 
-            // Back to courses button
-            backToCoursesBtn.addEventListener('click', (e) => {
+            // Contact Form
+            document.getElementById('contact-form').addEventListener('submit', (e) => {
                 e.preventDefault();
-                showPage('courses-page');
+                const name = document.getElementById('contact-name').value;
+                const email = document.getElementById('contact-email').value;
+                const message = document.getElementById('contact-message').value;
+                const submissions = JSON.parse(localStorage.getItem(STORAGE_KEYS.submissions)) || [];
+                const newSubmission = { name, email, message, timestamp: new Date().toISOString() };
+                submissions.unshift(newSubmission);
+                localStorage.setItem(STORAGE_KEYS.submissions, JSON.stringify(submissions));
+                
+                const feedback = document.getElementById('contact-feedback');
+                feedback.innerHTML = `<div class="alert alert-success">Thank you, ${name}. Your message has been sent.</div>`;
+                e.target.reset();
+                setTimeout(() => feedback.innerHTML = '', 5000);
             });
 
-            // Contact form submission
-            contactForm.addEventListener('submit', (e) => {
+            // Admin Login
+            document.getElementById('admin-login-form').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const formData = new FormData(contactForm);
-                const name = formData.get('name');
-                const email = formData.get('email');
-                const message = formData.get('message');
-                
-                // Simulate sending the email
-                console.log('Form Submitted:', { name, email, message });
-                
-                // Show success message to user
-                contactFormFeedback.innerHTML = `
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Thank you, ${name}!</strong> Your message has been sent successfully. We'll get back to you at ${email}.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                `;
-                
-                // Clear the form
-                contactForm.reset();
+                const password = document.getElementById('admin-password').value;
+                if (password === ADMIN_PASSWORD) {
+                    bootstrap.Modal.getInstance(document.getElementById('adminLoginModal')).hide();
+                    showPage('admin-page');
+                    renderSubmissions();
+                    e.target.reset();
+                } else {
+                    alert('Incorrect password.');
+                }
             });
 
-            // --- 5. INITIAL PAGE LOAD ---
+            // Admin Logout
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                showPage('home-page');
+            });
+            
+            // Secret Admin Login Trigger (clicking the year in footer 5 times)
+            let clickCount = 0;
+            currentYearSpan.addEventListener('click', () => {
+                clickCount++;
+                if (clickCount > 4) {
+                    clickCount = 0;
+                    new bootstrap.Modal(document.getElementById('adminLoginModal')).show();
+                }
+            });
+
+
+            // --- 4. INITIAL LOAD ---
             currentYearSpan.textContent = new Date().getFullYear();
-            renderCourses(featuredCoursesContainer, coursesData.slice(0, 3), true); // Show first 3 as featured
-            renderCourses(allCoursesContainer, coursesData); // Show all courses
-            showPage('home-page'); // Ensure the home page is the first one visible
+            const savedTheme = localStorage.getItem(STORAGE_KEYS.theme) || 'light';
+            setTheme(savedTheme);
+            renderAnnouncements();
+            showPage('home-page');
         });
     </script>
 </body>
